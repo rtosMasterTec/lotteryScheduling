@@ -5,14 +5,23 @@
 static sigjmp_buf env[MAX_THREADS];
 
 
-int restoreState(char idx)
+void restoreState(char idx)
 {
    siglongjmp(env[idx], 1);
+   return;
 }
-int saveState(char idx)
+void saveState(char idx)
 {
    // giving thread idx and value to return
    sigsetjmp(env[idx], 0);
+   return;
+}
+
+int lottery()
+{
+   int winner=0;
+   // calculate a winner
+   return winner;
 }
 /***************************************************
  *
@@ -22,9 +31,10 @@ int saveState(char idx)
 int scheduler()
 {
    // Save the state
-   saveState();
+   saveState(threadID);
+   threadID = lottery();
    // Restore the state
-   restoreState();
+   restoreState(threadID);
 }
 
 
