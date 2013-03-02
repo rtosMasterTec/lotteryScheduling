@@ -14,7 +14,7 @@ TARGETTYPE      := executable
 #TARGETTYPE      := staticlib
 
 # ---> The name of the shared lib, static lib or executable:
-TARGETNAME      := main.exe
+TARGETNAME      := lottery.exec
 #TARGETNAME      := libMyLib.so
 #TARGETNAME      := libMyLib.a
 # ---> Compileroptions
