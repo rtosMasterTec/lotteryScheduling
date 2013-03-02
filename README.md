@@ -1,4 +1,4 @@
 lotteryScheduling
 =================
 
-threads creation in linux for lottery scheduling
+Threads creation in linux and lottery scheduling
