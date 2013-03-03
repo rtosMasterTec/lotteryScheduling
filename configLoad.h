@@ -1,3 +1,5 @@
+#include <stdio.h>   /* required for file operations */
+#include <stdlib.h>
 #include <stdbool.h>
 #include "def.h"
 
@@ -10,5 +12,7 @@ typedef struct config_s
    unsigned totaltickets;
    unsigned totalwork;
 } config_t;
+
+extern config_t config;
 
 

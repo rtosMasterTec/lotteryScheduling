@@ -1,6 +1,7 @@
-#include <stdio.h>   /* required for file operations */
-#include <stdlib.h>
 #include "configLoad.h"
+
+// global variables
+config_t config;
 
 int readfile (void) {
 
@@ -19,20 +20,20 @@ int readfile (void) {
    /* inicializacion de variables */
 
    linea = 1;
-   preemptive = 0;
-   tickets[0] = 0;
-   tickets[1] = 0;
-   tickets[2] = 0;
-   tickets[3] = 0;
-   tickets[4] = 0;
-   workLoad[0] = 0;
-   workLoad[1] = 0;
-   workLoad[2] = 0;
-   workLoad[3] = 0;
-   workLoad[4] = 0;
-   quantum = 0;
-   totalwork = 0;
-   totaltickets = 0;
+   config.preemptive = 0;
+   config.tickets[0] = 0;
+   config.tickets[1] = 0;
+   config.tickets[2] = 0;
+   config.tickets[3] = 0;
+   config.tickets[4] = 0;
+   config.workLoad[0] = 0;
+   config.workLoad[1] = 0;
+   config.workLoad[2] = 0;
+   config.workLoad[3] = 0;
+   config.workLoad[4] = 0;
+   config.quantum = 0;
+   config.totalwork = 0;
+   config.totaltickets = 0;
 
    while(fgets(line, 80, fr) != NULL)
    {
@@ -44,52 +45,52 @@ int readfile (void) {
 
             if (linea == 1) {
                 /*sscanf (line, "%d", &preemptive);*/
-                if (line[0] == '1') preemptive = 1;
-                else preemptive = 0;
+                if (line[0] == '1') config.preemptive = true;
+                else config.preemptive = false;
                 linea = (linea + 1);
             } else
                 if (linea == 2) {
-                    sscanf (line, "%d", &tickets[0]);
+                    sscanf (line, "%d", &config.tickets[0]);
                     linea = (linea + 1);
             } else
                 if (linea == 3) {
-                    sscanf (line, "%d", &tickets[1]);
+                    sscanf (line, "%d", &config.tickets[1]);
                     linea = (linea + 1);
             } else
                 if (linea == 4) {
-                    sscanf (line, "%d", &tickets[2]);
+                    sscanf (line, "%d", &config.tickets[2]);
                     linea = (linea + 1);
             } else
                 if (linea == 5) {
-                    sscanf (line, "%d", &tickets[3]);
+                    sscanf (line, "%d", &config.tickets[3]);
                     linea = (linea + 1);
             } else
                 if (linea == 6) {
-                    sscanf (line, "%d", &tickets[4]);
+                    sscanf (line, "%d", &config.tickets[4]);
                     linea = (linea + 1);
             } else
                 if (linea == 7) {
-                    sscanf (line, "%d", &workLoad[0]);
+                    sscanf (line, "%d", &config.workLoad[0]);
                     linea = (linea + 1);
             } else
                 if (linea == 8) {
-                    sscanf (line, "%d", &workLoad[1]);
+                    sscanf (line, "%d", &config.workLoad[1]);
                     linea = (linea + 1);
             } else
                 if (linea == 9) {
-                    sscanf (line, "%d", &workLoad[2]);
+                    sscanf (line, "%d", &config.workLoad[2]);
                     linea = (linea + 1);
             } else
                 if (linea == 10) {
-                    sscanf (line, "%d", &workLoad[3]);
+                    sscanf (line, "%d", &config.workLoad[3]);
                     linea = (linea + 1);
             } else
                 if (linea == 11) {
-                    sscanf (line, "%d", &workLoad[4]);
+                    sscanf (line, "%d", &config.workLoad[4]);
                     linea = (linea + 1);
             } else
                 if (linea == 12) {
-                    sscanf (line, "%d", &quantum);
+                    sscanf (line, "%d", &config.quantum);
                     linea = (linea + 1);
             }
         } /* close if (line[0] != '#') */
@@ -97,5 +98,6 @@ int readfile (void) {
 
    fclose(fr);  /* close the file */
    
+   return 0;
 }
 
