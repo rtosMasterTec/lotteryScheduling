@@ -1,0 +1,16 @@
+#Modo de operacion (1 = Expropiativo, 0 = No expropiativo)
+1
+#Boletos asignados a cada thread:
+10
+5
+25
+33
+2
+#Unidades de trabajo asignadas a cada thread
+3
+10
+16
+22
+1
+#Quantum (en milisegundos) o porcentaje de trabajo antes de ceder el CPU
+5
