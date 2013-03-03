@@ -1,4 +1,4 @@
-#include <bool.h>
+#include <stdbool.h>
 #include "def.h"
 
 typedef struct config_s

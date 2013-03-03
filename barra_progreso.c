@@ -2,8 +2,9 @@
 #include <stdio.h>
 #include <curses.h>
 #include <term.h>
+#include <unistd.h>
 
-int main(void) {
+int display(void) {
 	printf("Hello world\n");
 
 	int progress = 0;

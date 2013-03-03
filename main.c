@@ -4,9 +4,11 @@
 #include "configLoad.h"
 #include "mathAlgo.h"
 
-int main( int argc, int **argv)
+int main( int argc, char **argv)
 {
    printf("Hello world!\n");
+   scheduler();
+   
 
    return 0;
 }
