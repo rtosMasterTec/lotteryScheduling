@@ -11,6 +11,9 @@ typedef struct config_s
    unsigned quantum;
    unsigned totaltickets;
    unsigned totalwork;
+   unsigned threadbuffer[MAX_THREADS];
+   unsigned winner;
+   unsigned winthread;
 } config_t;
 
 extern config_t config;
