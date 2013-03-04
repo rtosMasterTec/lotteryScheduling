@@ -3,17 +3,15 @@
 #include <sys/time.h>
 #include <signal.h>
 #include <unistd.h>
+#include <stdbool.h>
 
 #include "def.h"
 #include "mathAlgo.h"
 
-// sigjmp definitions for initialization
-#define JB_SP 6
-#define JB_PC 7
-
 //
-#define STACK_SIZE 1000
-typedef unsigned long address_t; // this is a machine address
+#define STACK_SIZE 1024
+
+typedef uint32_t address_t; // this is a machine address
 // Struct to hold the scheduler information
 typedef struct scheduler_s
 {
@@ -22,3 +20,8 @@ typedef struct scheduler_s
    char stack[MAX_THREADS][STACK_SIZE];
    struct itimerval timer;
 } scheduler_t;
+
+// public Functions
+
+void schedulerInit();
+void scheduler();

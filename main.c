@@ -7,8 +7,8 @@
 int main( int argc, char **argv)
 {
    printf("Hello world!\n");
-   scheduler();
    
+   scheduler();
 
    return 0;
 }
