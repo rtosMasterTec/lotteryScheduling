@@ -6,7 +6,7 @@
 #include <stdbool.h>
 
 #include "def.h"
-#include "mathAlgo.h"
+//#include "mathAlgo.h"
 
 //
 #define STACK_SIZE 1024
