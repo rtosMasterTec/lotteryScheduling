@@ -23,6 +23,7 @@ typedef struct scheduler_s
 {
    sigjmp_buf env[MAX_THREADS];
    unsigned threadID;
+   bool taskInit[MAX_THREADS];
    char stack[MAX_THREADS][STACK_SIZE];
    struct itimerval timer;
 } scheduler_t;

@@ -50,9 +50,9 @@ void schedulerInit()
 {
    unsigned thread;
    initDone = true;
-   for( thread = 1; thread < MAX_THREADS ; thread ++ )
+   for( thread = 0; thread < MAX_THREADS ; thread ++ )
    {
-      memcpy( &sData.env[thread], &sData.env[0], sizeof( sigjmp_buf ) ); 
+      sData.taskInit[thread] = false;
    }
    // init the timer with 0
    sData.timer.it_interval.tv_sec = 0;
@@ -67,33 +67,41 @@ void schedulerInit()
  ***************************************************/
 void scheduler()
 {
-   static unsigned counter;
    int ret;
    int allDone;
-   for( counter = 0; counter < 10* MAX_THREADS; counter++)
+   printf("Getting the alarm for thread: %d\n", sData.threadID );
+   // Save the state
+   ret = saveState(sData.threadID);
+   if( ret != 0 )
    {
-      printf("Getting the alarm for thread: %d\n", sData.threadID );
-      // Save the state
-      ret = saveState(sData.threadID);
-      if( ret != 0 )
+      // return to resume execution
+      // in the thread
+      return;
+   }
+   if( !initDone )
+   {
+      schedulerInit();
+   }
+   sData.threadID = lottery();
+   // Set timer
+   preemtiveTime();
+   // Catch the timer signal
+   signal(SIGALRM, scheduler);
+   printf("sigalm passed\n");
+   if( sData.taskInit[sData.threadID] )
+   {
+      // call function for first time
+      algo();
+      // when reaching this part the task finished execution
+      allDone = invalidateThread(sData.threadID);
+      // enters if all the threads had completed their job
+      if(allDone  == 1 )
       {
-         allDone = invalidateThread(sData.threadID);
-         // enters if all the threads had completed their job
-         if(allDone  == 1 )
-         {
-            return;
-         }
+         return;
       }
-      if( !initDone )
-      {
-         schedulerInit();
-      }
-      sData.threadID = lottery();
-      // Set timer
-      preemtiveTime();
-      // Catch the timer signal
-      signal(SIGALRM, scheduler);
-      printf("sigalm passed\n");
+   }
+   else
+   {
       // Restore the state
       restoreState(sData.threadID);
    }
