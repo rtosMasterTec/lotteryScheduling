@@ -97,7 +97,46 @@ int readfile (void) {
    } /* Close While */
 
    fclose(fr);  /* close the file */
-   
+
+   /* Despliegue de informacion obtenida del archivo */
+
+   if (config.preemptive) printf ("Modo de operacion: No Expropiativo\n");
+   else printf ("Modo de operacion: Expropiativo\n");
+
+   printf ("\n");
+
+   printf ("Boletos thread 1: %4d", config.tickets[0]);
+   printf ("            Unidades de trabajo thread 1: %4d\n", config.workLoad[0]);
+
+   printf ("Boletos thread 2: %4d", config.tickets[1]);
+   printf ("            Unidades de trabajo thread 2: %4d\n", config.workLoad[1]);
+
+   printf ("Boletos thread 3: %4d", config.tickets[2]);
+   printf ("            Unidades de trabajo thread 3: %4d\n", config.workLoad[2]);
+
+   printf ("Boletos thread 4: %4d", config.tickets[3]);
+   printf ("            Unidades de trabajo thread 4: %4d\n", config.workLoad[3]);
+
+   printf ("Boletos thread 5: %4d", config.tickets[4]);
+   printf ("            Unidades de trabajo thread 5: %4d\n", config.workLoad[4]);
+
+   printf ("\n");
+
+   if (config.preemptive) {
+        printf ("Tamaño del quantum: %d", config.quantum);
+        printf ("ms\n");
+   }
+   else {
+        printf ("Porcentaje de trabajo para ceder CPU: %d", config.quantum);
+        printf ("%%\n");
+   }
+   printf ("\n");
+
+   config.totaltickets = (config.tickets[0]+config.tickets[1]+config.tickets[2]+config.tickets[3]+config.tickets[4]);
+   printf ("Total de tiquetes: %d\n", config.totaltickets);
+
+   printf ("\n");
+
    return 0;
 }
 
