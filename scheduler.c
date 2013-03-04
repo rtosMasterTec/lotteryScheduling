@@ -88,10 +88,11 @@ void scheduler()
    // Catch the timer signal
    signal(SIGALRM, scheduler);
    printf("sigalm passed\n");
-   if( sData.taskInit[sData.threadID] )
+   if( !sData.taskInit[sData.threadID] )
    {
       // call function for first time
       algo();
+      sData.taskInit[sData.threadID] = true;
       // when reaching this part the task finished execution
       allDone = invalidateThread(sData.threadID);
       // enters if all the threads had completed their job
