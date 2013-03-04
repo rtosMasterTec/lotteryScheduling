@@ -5,7 +5,7 @@
 #include <unistd.h>
 
 #include "def.h"
-#include "mathAlgo.h"
+//#include "mathAlgo.h"
 
 // sigjmp definitions for initialization
 #define JB_SP 6
