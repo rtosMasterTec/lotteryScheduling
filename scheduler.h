@@ -1,9 +1,14 @@
+#ifndef __SCHEDULER_H__
+#define __SCHEDULER_H__
+
 #include <stdio.h>
 #include <setjmp.h>
 #include <sys/time.h>
 #include <signal.h>
 #include <unistd.h>
 #include <stdbool.h>
+#include <stdint.h>
+
 
 #include "def.h"
 //#include "mathAlgo.h"
@@ -25,3 +30,5 @@ typedef struct scheduler_s
 
 void schedulerInit();
 void scheduler();
+
+#endif // __SCHEDULER_H__

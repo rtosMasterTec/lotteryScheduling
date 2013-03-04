@@ -1,5 +1,5 @@
-#ifndef MATHALGO_H_
-#define MATHALGO_H_
+#ifndef __MATHALGO_H__
+#define __MATHALGO_H__
 
 #include <stdio.h>
 #include <math.h>
@@ -12,4 +12,4 @@ typedef struct threadData_s {
 
 void calculatePI(threadData_t *t);
 
-#endif
+#endif // __MATHALGO_H__
