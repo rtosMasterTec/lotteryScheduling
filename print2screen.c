@@ -26,16 +26,15 @@ void print2screen(
 	}else if(active_thread_n == 4){
                 is_activeE = 1;
         }
-
-printf("Athread: Pi Value: %f  CurrentTerm: %d  TotalTerms: %d Active: %d\n", 
+printf("\rAthread: Pi Value: %f  CurrentTerm: %d  TotalTerms: %d Active: %d\n", 
 ta->currPiValue, ta->currTerm, ta->totalTerms, is_activeA);
-printf("Bthread: Pi Value: %f  CurrentTerm: %d  TotalTerms: %d Active: %d\n", 
+printf("\rBthread: Pi Value: %f  CurrentTerm: %d  TotalTerms: %d Active: %d\n", 
 tb->currPiValue, tb->currTerm, tb->totalTerms, is_activeB);
-printf("Cthread: Pi Value: %f  CurrentTerm: %d  TotalTerms: %d Active: %d\n", 
+printf("\rCthread: Pi Value: %f  CurrentTerm: %d  TotalTerms: %d Active: %d\n", 
 tc->currPiValue, tc->currTerm, tc->totalTerms, is_activeC);
-printf("Dthread: Pi Value: %f  CurrentTerm: %d  TotalTerms: %d Active: %d\n", 
+printf("\rDthread: Pi Value: %f  CurrentTerm: %d  TotalTerms: %d Active: %d\n", 
 td->currPiValue, td->currTerm, td->totalTerms, is_activeD);
-printf("Ethread: Pi Value: %f  CurrentTerm: %d  TotalTerms: %d Active: %d\n", 
+printf("\rEthread: Pi Value: %f  CurrentTerm: %d  TotalTerms: %d Active: %d\n", 
 te->currPiValue, te->currTerm, te->totalTerms, is_activeE);
 //	printf("\rProgress: %d%% [", progress);
 //	for(i = 0 ; i < progress; i++)

@@ -30,7 +30,7 @@ INCPATH         := #-I/home/xyz/usr/include/jpeg-6b
 # ---> Linkeroptions
 LINK            := gcc
 LFLAGS          :=  # -fPIC
-LIBS            := #-ljpeg #-lpthread -ldl
+LIBS            := -lncurses #-ljpeg #-lpthread -ldl
 LIBPATH         := -L/home/xyz/usr/lib64/
 # ---> Options for a shared library
 SHARE_LIB_FLAG  := -shared -W1,-soname,

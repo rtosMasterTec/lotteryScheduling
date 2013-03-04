@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <curses.h>
+#include <term.h>
 #include "scheduler.h"
 #include "threads.h"
 #include "configLoad.h"
@@ -20,11 +23,11 @@ int main( int argc, char **argv)
 //   scheduler();
 
 	init_threads();
-
+initscr();
 threadData_t *currentThread;
 int i=0;
-while(i < 6){
-	print2screen(&AThread,&BThread,&CThread,&DThread,&EThread,i);
+while(i < 5){
+	system("clear");
 	switch(i) {
 	case 0 : currentThread = &AThread; break;
 	case 1 : currentThread = &BThread; break;
@@ -34,11 +37,13 @@ while(i < 6){
 	default : currentThread = &EThread; break;
 	}
 	calculatePI(currentThread);
+	print2screen(&AThread,&BThread,&CThread,&DThread,&EThread,i);
 	i = i +1;
-printf("---------------------\n");
 sleep(1);
 }
-
+    refresh();
+    getch();
+    endwin();
    return 0;
 }
 

@@ -1,7 +1,10 @@
+#ifndef PRINT2SCREEN_H_
+#define PRINT2SCREEN_H_
+
 #include <stdio.h>
-#include <term.h>
 #include <unistd.h>
-//#include "mathAlgo.h"
+#include "mathAlgo.h"
+
 void print2screen(
 	threadData_t *ta,
 	threadData_t *tb,
@@ -10,3 +13,5 @@ void print2screen(
 	threadData_t *te,
 	int active_thread_n
 );
+
+#endif
