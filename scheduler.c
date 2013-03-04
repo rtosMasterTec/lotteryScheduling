@@ -2,6 +2,7 @@
 
 
 static scheduler_t sData;
+static bool initDone ;
    
 void algo()
 {
@@ -40,24 +41,26 @@ void preemtiveTime()
    setitimer(ITIMER_VIRTUAL, &sData.timer, 0);
    return;
 }
+// placeholder
+int invalidateThread() {}
+// function that calls the function that has to accomplish the work and when it returns
+// gracefully invalidates their scheduling
+void returnHandler()
+{
+   algo();
+   // when the algorithm returns the thread is invalidated from the lottery
+   invalidateThread();
+   // call the scheduler
+   scheduler();
+}
 void schedulerInit()
 {
-   unsigned sp, pc;
    unsigned thread;
-   for( thread = 0 ; thread < MAX_THREADS ; thread++ )
+   initDone = true;
+   for( thread = 1; thread < MAX_THREADS ; thread ++ )
    {
-      sp = (address_t) sData.stack[thread] + STACK_SIZE - sizeof(address_t);
-      pc = ( unsigned ) &algo;
-      // Saving a generic environment
-      sigsetjmp(sData.env[thread],1);
-      // Modify the Env to have the stack assigned to each thread
-      (sData.env[thread]->__jmpbuf)[JB_SP] = sp;
-      // Modify the PC to the start of the function to run in the thread
-      (sData.env[thread]->__jmpbuf)[JB_PC] = pc;
-   // have a clean mask for the thread
-   sigemptyset(&sData.env[thread]->__saved_mask);
+      memcpy( &sData.env[thread], &sData.env[0], sizeof( sigjmp_buf ) ); 
    }
-
    // init the timer with 0
    sData.timer.it_interval.tv_sec = 0;
    sData.timer.it_interval.tv_usec = 0;
@@ -76,12 +79,26 @@ void scheduler()
    {
       printf("Getting the alarm for thread: %d\n", sData.threadID );
       // Save the state
-      saveState(sData.threadID);
+      ret = saveState(sData.threadID);
+      if( ret != 0 )
+      {
+         allDone = invalidateThread(sData.threadID);
+         // enters if all the threads had completed their job
+         if(allDone  == 1 )
+         {
+            return;
+         }
+      }
+      if( !initDone )
+      {
+         schedulerInit();
+      }
       sData.threadID = lottery();
       // Set timer
       preemtiveTime();
       // Catch the timer signal
       signal(SIGALRM, scheduler);
+      printf("sigalm passed\n");
       // Restore the state
       restoreState(sData.threadID);
    }
