@@ -32,8 +32,6 @@ void calculatePI(threadData_t *t)
 {
    double tempResultA = 0;
    double tempResultB = 1;
-   double tempResult = 1;
-   double finalResult = 1;
    double n = 2;  //initial m value
    double m = 2;  //initial m value
    

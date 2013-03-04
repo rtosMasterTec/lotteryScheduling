@@ -17,14 +17,14 @@ void algo()
 
 void restoreState(unsigned idx)
 {
-   siglongjmp(sData.env[idx], 1);
-   return;
+    siglongjmp(sData.env[idx], 1);
+    return;
 }
-void saveState(unsigned idx)
+int saveState(unsigned idx)
 {
    // giving thread idx and value to return
-   sigsetjmp(sData.env[idx], 0);
-   return;
+  
+   return sigsetjmp(sData.env[idx], 0);
 }
 
 int lottery()
@@ -42,16 +42,9 @@ void preemtiveTime()
    return;
 }
 // placeholder
-int invalidateThread() {}
-// function that calls the function that has to accomplish the work and when it returns
-// gracefully invalidates their scheduling
-void returnHandler()
+int  invalidateThread() 
 {
-   algo();
-   // when the algorithm returns the thread is invalidated from the lottery
-   invalidateThread();
-   // call the scheduler
-   scheduler();
+   return 0;
 }
 void schedulerInit()
 {
@@ -75,6 +68,8 @@ void schedulerInit()
 void scheduler()
 {
    static unsigned counter;
+   int ret;
+   int allDone;
    for( counter = 0; counter < 10* MAX_THREADS; counter++)
    {
       printf("Getting the alarm for thread: %d\n", sData.threadID );
