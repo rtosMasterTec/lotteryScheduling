@@ -60,19 +60,19 @@ sleep(1);
 }
 
 void init_threads(){
-   AThread.totalTerms = 20;
+
+Thread.totalTerms = 50*config.workLoad[0];
    AThread.currPiValue = 0;
-   
-   BThread.totalTerms = 2000;
+
+   BThread.totalTerms = 50*config.workLoad[1];
    BThread.currPiValue = 0;
 
-
-   CThread.totalTerms = 500;
+   CThread.totalTerms = 50*config.workLoad[2];
    CThread.currPiValue = 0;
 
-   DThread.totalTerms = 1000;
+   DThread.totalTerms = 50*config.workLoad[3];
    DThread.currPiValue = 0;
 
-   EThread.totalTerms = 100;
+   EThread.totalTerms = 50*config.workLoad[4];
    EThread.currPiValue = 0;
 }
