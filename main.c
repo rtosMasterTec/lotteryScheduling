@@ -7,6 +7,8 @@
 #include "configLoad.h"
 #include "mathAlgo.h"
 #include "print2screen.h"
+#include <time.h>
+
 
 threadData_t AThread;
 threadData_t BThread;
@@ -19,6 +21,16 @@ void init_threads();
 int main( int argc, char **argv)
 {
    printf("Hello world!\n");
+
+   srand ( time(NULL) );
+
+   readfile();
+
+   threadbuffer[0] = true;
+   threadbuffer[1] = true;
+   threadbuffer[2] = true;
+   threadbuffer[3] = true;
+   threadbuffer[4] = true;
 
    scheduler();
 
