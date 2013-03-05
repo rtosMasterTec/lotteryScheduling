@@ -28,13 +28,16 @@ int main()
 * and x = 1 for this case                                                  *
 * N.B: THIS SERIES CONVERGERS VERRRRYYY SLOWLY! for 10,000 terms,          *
 * pi = 3.130309. I checked this with an online reference.                  */
-void calculatePI(threadData_t *t)
+void calculatePI(threadData_t *t ,double percentage)
 {
    double tempResultA = 0;
    double tempResultB = 1;
    double n = 2;  //initial m value
    double m = 2;  //initial m value
-   
+   int numTermsExecute = 0; 
+
+   numTermsExecute = t->totalTerms*(percentage/100);
+ 
    if(t->totalTerms == 1)
    {
       t->currPiValue = 2*1;
