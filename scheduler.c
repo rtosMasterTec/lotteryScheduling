@@ -24,7 +24,7 @@ int saveState(unsigned idx)
 {
    // giving thread idx and value to return
   
-   return sigsetjmp(sData.env[idx], 0);
+   return sigsetjmp(sData.env[idx], 1);
 }
 
 int lottery()
@@ -90,10 +90,10 @@ void scheduler()
    printf("sigalm passed\n");
    if( !sData.taskInit[sData.threadID] )
    {
-      // call function for first time
-      algo();
       sData.taskInit[sData.threadID] = true;
       // when reaching this part the task finished execution
+      // call function for first time
+      algo();
       allDone = invalidateThread(sData.threadID);
       // enters if all the threads had completed their job
       if(allDone  == 1 )
