@@ -1,9 +1,15 @@
+#ifndef __SCHEDULER_H__
+#define __SCHEDULER_H__
+
 #include <stdio.h>
 #include <setjmp.h>
 #include <sys/time.h>
 #include <signal.h>
 #include <unistd.h>
 #include <stdbool.h>
+#include <stdint.h>
+#include <string.h>
+
 
 #include "def.h"
 //#include "mathAlgo.h"
@@ -17,6 +23,7 @@ typedef struct scheduler_s
 {
    sigjmp_buf env[MAX_THREADS];
    unsigned threadID;
+   bool taskInit[MAX_THREADS];
    char stack[MAX_THREADS][STACK_SIZE];
    struct itimerval timer;
 } scheduler_t;
@@ -25,3 +32,5 @@ typedef struct scheduler_s
 
 void schedulerInit();
 void scheduler();
+
+#endif // __SCHEDULER_H__

@@ -17,14 +17,14 @@ void algo()
 
 void restoreState(unsigned idx)
 {
-   siglongjmp(sData.env[idx], 1);
-   return;
+    siglongjmp(sData.env[idx], 1);
+    return;
 }
-void saveState(unsigned idx)
+int saveState(unsigned idx)
 {
    // giving thread idx and value to return
-   sigsetjmp(sData.env[idx], 0);
-   return;
+  
+   return sigsetjmp(sData.env[idx], 1);
 }
 
 int lottery()
@@ -42,24 +42,17 @@ void preemtiveTime()
    return;
 }
 // placeholder
-int invalidateThread() {}
-// function that calls the function that has to accomplish the work and when it returns
-// gracefully invalidates their scheduling
-void returnHandler()
+int  invalidateThread() 
 {
-   algo();
-   // when the algorithm returns the thread is invalidated from the lottery
-   invalidateThread();
-   // call the scheduler
-   scheduler();
+   return 0;
 }
 void schedulerInit()
 {
    unsigned thread;
    initDone = true;
-   for( thread = 1; thread < MAX_THREADS ; thread ++ )
+   for( thread = 0; thread < MAX_THREADS ; thread ++ )
    {
-      memcpy( &sData.env[thread], &sData.env[0], sizeof( sigjmp_buf ) ); 
+      sData.taskInit[thread] = false;
    }
    // init the timer with 0
    sData.timer.it_interval.tv_sec = 0;
@@ -74,31 +67,42 @@ void schedulerInit()
  ***************************************************/
 void scheduler()
 {
-   static unsigned counter;
-   for( counter = 0; counter < 10* MAX_THREADS; counter++)
+   int ret;
+   int allDone;
+   printf("Getting the alarm for thread: %d\n", sData.threadID );
+   // Save the state
+   ret = saveState(sData.threadID);
+   if( ret != 0 )
    {
-      printf("Getting the alarm for thread: %d\n", sData.threadID );
-      // Save the state
-      ret = saveState(sData.threadID);
-      if( ret != 0 )
+      // return to resume execution
+      // in the thread
+      return;
+   }
+   if( !initDone )
+   {
+      schedulerInit();
+   }
+   sData.threadID = lottery();
+   // Set timer
+   preemtiveTime();
+   // Catch the timer signal
+   signal(SIGALRM, scheduler);
+   printf("sigalm passed\n");
+   if( !sData.taskInit[sData.threadID] )
+   {
+      sData.taskInit[sData.threadID] = true;
+      // when reaching this part the task finished execution
+      // call function for first time
+      algo();
+      allDone = invalidateThread(sData.threadID);
+      // enters if all the threads had completed their job
+      if(allDone  == 1 )
       {
-         allDone = invalidateThread(sData.threadID);
-         // enters if all the threads had completed their job
-         if(allDone  == 1 )
-         {
-            return;
-         }
+         return;
       }
-      if( !initDone )
-      {
-         schedulerInit();
-      }
-      sData.threadID = lottery();
-      // Set timer
-      preemtiveTime();
-      // Catch the timer signal
-      signal(SIGALRM, scheduler);
-      printf("sigalm passed\n");
+   }
+   else
+   {
       // Restore the state
       restoreState(sData.threadID);
    }

@@ -1,5 +1,5 @@
-#ifndef PRINT2SCREEN_H_
-#define PRINT2SCREEN_H_
+#ifndef __PRINT2SCREEN_H__
+#define __PRINT2SCREEN_H__
 
 #include <stdio.h>
 #include <unistd.h>
@@ -14,4 +14,4 @@ void print2screen(
 	int active_thread_n
 );
 
-#endif
+#endif // __PRINT2SCREEN_H__

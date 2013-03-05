@@ -1,3 +1,6 @@
+#ifndef __CONFIGLOAD_H__
+#define __CONFIGLOAD_H__
+
 #include <stdio.h>   /* required for file operations */
 #include <stdlib.h>
 #include <stdbool.h>
@@ -16,4 +19,4 @@ typedef struct config_s
 
 extern config_t config;
 
-
+#endif //__CONFIGLOAD_H__
