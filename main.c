@@ -26,11 +26,11 @@ int main( int argc, char **argv)
 
    readfile();
 
-   threadbuffer[0] = true;
-   threadbuffer[1] = true;
-   threadbuffer[2] = true;
-   threadbuffer[3] = true;
-   threadbuffer[4] = true;
+config.threadbuffer[0] = true;
+config.threadbuffer[1] = true;
+config.threadbuffer[2] = true;
+config.threadbuffer[3] = true;
+config.threadbuffer[4] = true;
 
    scheduler();
 
