@@ -27,8 +27,14 @@ int main( int argc, char **argv)
 
    readfile();
 // read percentage from file
-percentage = config.quantum;
-
+if(config.preemptive == 0) {
+ 
+	percentage = config.quantum;
+} else
+{
+// Means its preemptive
+	percentage = 100;
+}
 // set threads to active
 config.threadbuffer[0] = true;
 config.threadbuffer[1] = true;
