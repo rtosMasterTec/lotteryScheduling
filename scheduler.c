@@ -339,7 +339,7 @@ void schedulerInit()
 void scheduler()
 {
    int ret;
-   bool allDone;
+   bool allDone = false;
    printf("Getting the alarm for thread: %d\n", sData.threadID );
    // Save the state
    ret = saveState(sData.threadID);
