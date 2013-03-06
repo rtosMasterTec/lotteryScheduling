@@ -42,6 +42,7 @@ int main( int argc, char **argv)
    config.threadbuffer[3] = true;
    config.threadbuffer[4] = true;
 
+//   sData.threadID = 5;
    scheduler(0);
    printf( "scheduler ok\n");
 
