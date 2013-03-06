@@ -20,6 +20,7 @@ void calculatePI(threadData_t *t ,double percentage)
    int totalIterations = 0;
    int currentIteration = 1;
    
+//printf("In Calculate PI\n");
    // set percentage
    if(percentage == 100)
    {
@@ -28,8 +29,9 @@ void calculatePI(threadData_t *t ,double percentage)
    else
    {
       numTermsExecute = t->totalTerms*(percentage/100);
-      
-      totalIterations = (t->totalTerms/numTermsExecute) + 1;
+//printf("NTE: %d\n", numTermsExecute);
+	totalIterations = (t->totalTerms/numTermsExecute) + 1;
+//printf("TI: %d\n", totalIterations);
    }
 
    if(t->totalTerms == 1)
@@ -53,7 +55,7 @@ void calculatePI(threadData_t *t ,double percentage)
       while(m <= n)
       {
           tempResultB = tempResultB*(((2*m)-3)/((2*m)-2));
-          //printf("This fract is %f : Nth term = %d \n", tempResultB, (int) n);
+        //printf("This fract is %f : Nth term = %d \n", tempResultB, (int) n);
           m++;
       }
 
@@ -67,12 +69,14 @@ void calculatePI(threadData_t *t ,double percentage)
       m = 2;
       tempResultB = 1;
       
-      // not preemptive code to give control to CPU
-      if (totalIterations != 0 && n == (numTermsExecute*currentIteration)) // if not preemptive we go in here
+      
+	// not preemptive code to give control to CPU
+      if (totalIterations != 0 && (n == (numTermsExecute*currentIteration))) // if not preemptive we go in here
       {
             currentIteration++;
-            //give control to CPU. Should eventually return control here
-         
+	 printf("---Giving Control to Scheduler---\n");
+            //give control to scheduler; Should eventually return control here
+	    syscall(SIGVTALRM); 
       }
       
    } //end while totalTerms

@@ -19,4 +19,5 @@ typedef struct config_s
 
 extern config_t config;
 
+int readfile(void);
 #endif //__CONFIGLOAD_H__

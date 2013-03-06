@@ -3,6 +3,7 @@
 #include <time.h>
 #include <stdbool.h>
 #include "configLoad.h"
+#include "print2screen.h"
 
 static volatile int dummy;
 scheduler_t sData;
@@ -413,7 +414,8 @@ void scheduler(int v)
       // when reaching this part the task finished execution
       // call function for first time
       algo();
-      printf("task %d is done\n", sData.threadID);
+      //print2screen(t[0],t[1],t[2],t[3],t[4],sData.threadID);
+      printf("\ntask %d is done\n", sData.threadID);
       allDone = invalidateThread(sData.threadID);
       // enters if all the threads had completed their job
       allDone = 1;// tmp measure
