@@ -14,10 +14,12 @@
 
 #include "def.h"
 //#include "mathAlgo.h"
+#define JB_SP 6
 
 //
 #define STACK_SIZE 1024
 
+char stack [MAX_THREADS+1][STACK_SIZE];
 typedef uint32_t address_t; // this is a machine address
 // Struct to hold the scheduler information
 typedef struct scheduler_s
@@ -28,10 +30,11 @@ typedef struct scheduler_s
    char stack[MAX_THREADS][STACK_SIZE];
    struct itimerval timer;
 } scheduler_t;
+extern scheduler_t sData;
 
 // public Functions
 
 void schedulerInit();
-void scheduler(int val,threadData_t **t);
+void scheduler(int val);
 
 #endif // __SCHEDULER_H__

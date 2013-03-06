@@ -26,7 +26,7 @@ int main( int argc, char **argv)
 
    srand ( time(NULL) );
 
-      readfile();
+   readfile();
    // read percentage from file
    if(config.preemptive == 0) {
 
@@ -43,15 +43,18 @@ int main( int argc, char **argv)
    config.threadbuffer[3] = true;
    config.threadbuffer[4] = true;
 
-threads_arr[0] = &AThread;
-threads_arr[1] = &BThread;
-threads_arr[2] = &CThread;
-threads_arr[3] = &DThread;
-threads_arr[4] = &EThread;
+   sData.threadID = 5;
+   scheduler(0);
+
+   printf( "scheduler ok\n");
+   threads_arr[0] = &AThread;
+   threads_arr[1] = &BThread;
+   threads_arr[2] = &CThread;
+   threads_arr[3] = &DThread;
+   threads_arr[4] = &EThread;
 
    init_threads();
    initscr();
-   scheduler(0,&threads_arr);
    printw("\rscheduler ok\n");
 
    refresh();
@@ -64,17 +67,17 @@ void init_threads(){
 
    AThread.totalTerms = 50*config.workLoad[0];
    AThread.currPiValue = 0;
-	printf("ATotalTerms %d\n", AThread.totalTerms);
+   printf("ATotalTerms %d\n", AThread.totalTerms);
    BThread.totalTerms = 50*config.workLoad[1];
    BThread.currPiValue = 0;
-	printf("BTotalTerms %d\n", BThread.totalTerms);
+   printf("BTotalTerms %d\n", BThread.totalTerms);
    CThread.totalTerms = 50*config.workLoad[2];
    CThread.currPiValue = 0;
-	printf("CTotalTerms %d\n", CThread.totalTerms);
+   printf("CTotalTerms %d\n", CThread.totalTerms);
    DThread.totalTerms = 50*config.workLoad[3];
    DThread.currPiValue = 0;
-	printf("DTotalTerms %d\n", DThread.totalTerms);
+   printf("DTotalTerms %d\n", DThread.totalTerms);
    EThread.totalTerms = 50*config.workLoad[4];
    EThread.currPiValue = 0;
-	printf("ETotalTerms %d\n", EThread.totalTerms);
+   printf("ETotalTerms %d\n", EThread.totalTerms);
 }

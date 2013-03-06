@@ -6,7 +6,7 @@
 #include "print2screen.h"
 
 static volatile int dummy;
-static scheduler_t sData;
+scheduler_t sData;
 static bool initDone ;
    
 void algo()
@@ -25,14 +25,30 @@ void algo()
 
 void restoreState(unsigned idx)
 {
-    siglongjmp(sData.env[idx], 1);
-    return;
+   int retval = 1;
+   if(5 == idx)
+   {
+      retval = 5;
+
+   }
+   siglongjmp(sData.env[idx], retval);
+   return;
 }
 int saveState(unsigned idx)
 {
    // giving thread idx and value to return
+   int ret;
+   void * ptr;
   
-   return sigsetjmp(sData.env[idx], 1);
+
+   ret = sigsetjmp(sData.env[idx], 1);
+   // modify the stack to not interfere with current execution
+   if( 0 != ret && 5 != idx )
+   {
+      //ptr = (&sData.env[idx]+JB_SP );
+      //*ptr = (uint32_t ) (&stack[idx][STACK_SIZE -1]);
+   }
+   return ret;
 }
 
 int lottery()
@@ -41,7 +57,7 @@ int lottery()
    int winner=0;
    winner = sData.threadID+1;
    winner =0;
-   if( winner >=  MAX_THREADS )
+   if( winner >= MAX_THREADS    )
       winner = 0;
    // calculate a winner
    return winner;
@@ -321,6 +337,7 @@ void preemtiveTime()
 //   ualarm(quantum);
 
    //getitimer(ITIMER_VIRTUAL,&sData.timer);
+   printf("setting the timer\n");
    sData.timer.it_value.tv_sec = 0;
    sData.timer.it_value.tv_usec = 100000;
    sData.timer.it_interval.tv_sec = 0;
@@ -352,29 +369,30 @@ void schedulerInit()
    {
       sData.taskInit[thread] = false;
    }
-   // init the timer with 0
-   sData.timer.it_interval.tv_sec = 2;
-   sData.timer.it_interval.tv_usec = 0;
-   sData.timer.it_value.tv_sec = 2; // quantum value
-   sData.timer.it_value.tv_usec=0;
+
 }
 /***************************************************
  *
  * Lottery Scheduler
  *
  ***************************************************/
-void scheduler(int v, threadData_t **t)
+void scheduler(int v)
 {
    int ret;
    bool allDone = false;
    printf("Getting the alarm for thread: %d\n", sData.threadID );
    // Save the state
    ret = saveState(sData.threadID);
-   if( ret != 0 )
+   if( 1 == ret  )
    {
       printf("restoring state %d\n", sData.threadID);
       // return to resume execution
       // in the thread
+      return;
+   }
+   if( 5 == ret )
+   {
+      // the case to return from the scheduler to the main
       return;
    }
    dummy = 0;
@@ -391,15 +409,18 @@ void scheduler(int v, threadData_t **t)
    printf("sigalm passed\n");
    if( !sData.taskInit[sData.threadID] )
    {
+      printf("initializing thread: %d\n", sData.threadID);
       sData.taskInit[sData.threadID] = true;
       // when reaching this part the task finished execution
       // call function for first time
       algo();
-   print2screen(t[0],t[1],t[2],t[3],t[4],sData.threadID);
+      //print2screen(t[0],t[1],t[2],t[3],t[4],sData.threadID);
       printf("\ntask %d is done\n", sData.threadID);
       allDone = invalidateThread(sData.threadID);
       // enters if all the threads had completed their job
       allDone = 1;// tmp measure
+      //change the stack ptr to the old position
+      restoreState(6);
       if(allDone)
       {
          return;
