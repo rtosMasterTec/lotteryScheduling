@@ -3,6 +3,10 @@
 
 #include <stdio.h>
 #include <math.h>
+#include <signal.h>
+#include <sys/syscall.h>
+#include <unistd.h>
+//#include "scheduler.h" 
 
 typedef struct threadData_s {
     int totalTerms;
