@@ -98,8 +98,18 @@ Si se va a compilar utilizando gcc, hay que incluir la opcion -lncurses
 3) Scheduler
 
 	1- Hace scheduling expropiativo o no-expropiativo dependiendo del archivo de configuracion
-	2- Inicia los threads mediante las funciones de sigsetjmp() y siglongjmp()
-	3- Cuando se termina de ejecutar un thread, llama a print2screen() para actualizar la barra de progreso.
+	2- Inicia los threads mediante las funciones de sigsetjmp() y siglongjmp(), las cuales fueron insertadas dentro de funciones auxiliares
+   saveState y restoreState
+   3- Despues del primer saveState se retorna el valor que viene ya sea de un restore del estado o de salvar el estado, cuando proviene de salvar
+   el estado es 0 el retorno mientras que cuando proviene de restaurar el estado seria un 1, se hizo un experimento de tener pilas distintas para 
+   cada thread en cuyo caso devuelve un 5 cuando se requiere restaurar el estado original (para poder devolverse al main con el correcto estado de pila)
+   El switch entre thread funciona sin embargo la interrupcion de tiempo no funciona despues de cambiar a un segundo thread, por lo que solo se pudo 
+   realizar con un unico thread
+   4- Se procede a setear el timer de interrupcion de tiempo y posteriormente a setear la funcion que recibe la interrupcion (en realidad la senal que
+   general el SO despues de recibir la interrupcion)
+   5- Se decicio utilizar un timer virtual ya que solo toma en cuenta el tiempo mientras se esta ejecutando la tarea y no mientras la tarea fue 
+   expropiada por el SO (linux)
+	4- Cuando se termina de ejecutar un thread, llama a print2screen() para actualizar la barra de progreso.
 
 4) CalculatePI
 
@@ -123,6 +133,12 @@ Si se va a compilar utilizando gcc, hay que incluir la opcion -lncurses
 ////////////////////////////////////////////////////
 
 	Se recomienda una terminal de por lo menos 90x25 para que la barra de progreso no se desborde.
+   No esta funcionando para mas de un thread y nos faltaron detalles de integracion de los distintos componentes al centrarnos en realizar el problema 
+   que tuvimos, ya que luego de ejecutar el scheduler pasa el control al primer task, luego del quantum de tiempo el control es expropiado y se procede 
+   a llamar un segundo thread, sin embargo el control nunca regresa al scheduler (que deberia realizar el catch de la excepcion disparada por el timer)
+   sin embargo al parecer no se vuelve a generar esta excepcion cuando se realiza un cambio hacia otra tarea, mientras que si se realiza un cambio entre 
+   el scheduler y una sola tarea siempre se generan las excepcion y son capturadas sin problema.
+
 
 
 Eso es todo!
