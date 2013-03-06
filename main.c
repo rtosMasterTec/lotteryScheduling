@@ -26,7 +26,7 @@ int main( int argc, char **argv)
    scheduler(0);
    srand ( time(NULL) );
 
-   readfile();
+//   readfile();
 // read percentage from file
 if(config.preemptive == 0) {
  
@@ -42,7 +42,6 @@ config.threadbuffer[1] = true;
 config.threadbuffer[2] = true;
 config.threadbuffer[3] = true;
 config.threadbuffer[4] = true;
-   scheduler();
 
 	init_threads();
 initscr();
