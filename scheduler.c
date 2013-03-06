@@ -4,21 +4,86 @@
 #include <stdbool.h>
 #include "configLoad.h"
 #include "print2screen.h"
+#include "mathAlgo.h"
 
 static volatile int dummy;
 scheduler_t sData;
 static bool initDone ;
+void init_threads();
+threadData_t Athread;
+threadData_t Bthread;
+threadData_t Cthread;
+threadData_t Dthread;
+threadData_t Ethread;
+
+
+
+void init_threads(){
+
+   // set threads to active
+   config.threadbuffer[0] = true;
+   config.threadbuffer[1] = true;
+   config.threadbuffer[2] = true;
+   config.threadbuffer[3] = true;
+   config.threadbuffer[4] = true;
+
+   // put threads into array
+/*   threads_arr[0] = &Athread;
+   threads_arr[1] = &Bthread;
+   threads_arr[2] = &Cthread;
+   threads_arr[3] = &Dthread;
+   threads_arr[4] = &Ethread;*/
+
+   // Load workload units into global structures
+   Athread.totalTerms = 50*config.workLoad[0];
+   Athread.currPiValue = 0;
+   printf("ATotalTerms %d\n", Athread.totalTerms);
+   Bthread.totalTerms = 50*config.workLoad[1];
+   Bthread.currPiValue = 0;
+   printf("BTotalTerms %d\n", Bthread.totalTerms);
+   Cthread.totalTerms = 50*config.workLoad[2];
+   Cthread.currPiValue = 0;
+   printf("CTotalTerms %d\n", Cthread.totalTerms);
+   Dthread.totalTerms = 50*config.workLoad[3];
+   Dthread.currPiValue = 0;
+   printf("DTotalTerms %d\n", Dthread.totalTerms);
+   Ethread.totalTerms = 50*config.workLoad[4];
+   Ethread.currPiValue = 0;
+   printf("ETotalTerms %d\n", Ethread.totalTerms);
+}
    
 void algo()
 {
-   unsigned i;
+   double percentage;
+   threadData_t currentThread;	
+
+   // read percentage from file
+   if(config.preemptive == 0) {
+
+      percentage = config.quantum;
+   } else
+   {
+      // Means its preemptive
+      percentage = 100;
+   }
+   
+   if(sData.threadID == 0) { currentThread = Athread; }
+   if(sData.threadID == 1) { currentThread = Bthread; }
+   if(sData.threadID == 2) { currentThread = Cthread; }
+   if(sData.threadID == 3) { currentThread = Dthread; }
+   if(sData.threadID == 4) { currentThread = Ethread; }
+
+   calculatePI(&currentThread , percentage);
+
+// TODO ERASE THE FOLLOWING LINES FOR PRODUCTION CODE
+/*   unsigned i;
    for(i = 0; i<10; i++ )
    {
       printf("Current thread is: %d, data: %d\n", sData.threadID, i);
       // wait until task slice ends
       dummy = 1 ;
       while(dummy ); 
-   }
+   }*/
       
 }
 
@@ -62,6 +127,7 @@ int lottery()
    // calculate a winner
    return winner;
 }
+
 //unsigned lottery (void) 
 //{
 //
@@ -333,7 +399,7 @@ int lottery()
 void preemtiveTime()
 {
 //   unsigned quantum;
-//   quantum = 100;
+//    quantum = config.quantum;
 //   ualarm(quantum);
 
    //getitimer(ITIMER_VIRTUAL,&sData.timer);
@@ -369,6 +435,7 @@ void schedulerInit()
    {
       sData.taskInit[thread] = false;
    }
+   init_threads();
 
 }
 /***************************************************
@@ -414,7 +481,8 @@ void scheduler(int v)
       // when reaching this part the task finished execution
       // call function for first time
       algo();
-      //print2screen(t[0],t[1],t[2],t[3],t[4],sData.threadID);
+initscr();
+      print2screen(&Athread,&Bthread,&Cthread,&Dthread,&Ethread,sData.threadID);
       printf("\ntask %d is done\n", sData.threadID);
       allDone = invalidateThread(sData.threadID);
       // enters if all the threads had completed their job
@@ -433,5 +501,7 @@ void scheduler(int v)
    }
    return;
 }
+
+
 
 

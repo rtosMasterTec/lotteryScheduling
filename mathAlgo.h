@@ -15,6 +15,7 @@ typedef struct threadData_s {
 } threadData_t;
 
 
+
 void calculatePI(threadData_t *t, double percentage);
 
 #endif // __MATHALGO_H__
