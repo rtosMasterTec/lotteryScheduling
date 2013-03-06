@@ -23,48 +23,50 @@ int main( int argc, char **argv)
 {
    printf("Hello world!\n");
 
-   scheduler(0);
    srand ( time(NULL) );
 
-//   readfile();
-// read percentage from file
-if(config.preemptive == 0) {
- 
-	percentage = config.quantum;
-} else
-{
-// Means its preemptive
-	percentage = 100;
-}
-// set threads to active
-config.threadbuffer[0] = true;
-config.threadbuffer[1] = true;
-config.threadbuffer[2] = true;
-config.threadbuffer[3] = true;
-config.threadbuffer[4] = true;
+   //   readfile();
+   // read percentage from file
+   if(config.preemptive == 0) {
 
-	init_threads();
-initscr();
-threadData_t *currentThread;
-int i=0;
-while(i < 5){
-	system("clear");
-	switch(i) {
-	case 0 : currentThread = &AThread; break;
-	case 1 : currentThread = &BThread; break;
-	case 2 : currentThread = &CThread; break;
-	case 3 : currentThread = &DThread; break;
-	case 4 : currentThread = &EThread; break;
-	default : currentThread = &EThread; break;
-	}
-	calculatePI(currentThread,percentage);
-	print2screen(&AThread,&BThread,&CThread,&DThread,&EThread,i);
-	i = i +1;
-sleep(1);
-}
-    refresh();
-    getch();
-    endwin();
+      percentage = config.quantum;
+   } else
+   {
+      // Means its preemptive
+      percentage = 100;
+   }
+   // set threads to active
+   config.threadbuffer[0] = true;
+   config.threadbuffer[1] = true;
+   config.threadbuffer[2] = true;
+   config.threadbuffer[3] = true;
+   config.threadbuffer[4] = true;
+
+   scheduler(0);
+   printf( "scheduler ok\n");
+
+   init_threads();
+   initscr();
+   threadData_t *currentThread;
+   int i=0;
+   while(i < 5){
+      system("clear");
+      switch(i) {
+         case 0 : currentThread = &AThread; break;
+         case 1 : currentThread = &BThread; break;
+         case 2 : currentThread = &CThread; break;
+         case 3 : currentThread = &DThread; break;
+         case 4 : currentThread = &EThread; break;
+         default : currentThread = &EThread; break;
+      }
+      calculatePI(currentThread,percentage);
+      print2screen(&AThread,&BThread,&CThread,&DThread,&EThread,i);
+      i = i +1;
+      sleep(1);
+   }
+   refresh();
+   getch();
+   endwin();
    return 0;
 }
 

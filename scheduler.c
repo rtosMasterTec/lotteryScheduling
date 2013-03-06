@@ -362,7 +362,7 @@ void schedulerInit()
  * Lottery Scheduler
  *
  ***************************************************/
-void scheduler(int val)
+void scheduler(int v)
 {
    int ret;
    bool allDone = false;
@@ -394,9 +394,10 @@ void scheduler(int val)
       // when reaching this part the task finished execution
       // call function for first time
       algo();
-      printf("task %d is done", sData.threadID);
+      printf("task %d is done\n", sData.threadID);
       allDone = invalidateThread(sData.threadID);
       // enters if all the threads had completed their job
+      allDone = 1;// tmp measure
       if(allDone)
       {
          return;
