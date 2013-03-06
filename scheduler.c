@@ -1,5 +1,7 @@
 #include "scheduler.h"
 
+static volatile int dummy;
+
 
 static scheduler_t sData;
 static bool initDone ;
@@ -7,11 +9,14 @@ static bool initDone ;
 void algo()
 {
    unsigned i;
-   for( i = sData.threadID ; i<10 ; i++)
+   for(i = 0; i<10; i++ )
    {
       printf("Current thread is: %d, data: %d\n", sData.threadID, i);
-      sleep(1);
+      // wait until task slice ends
+      dummy = 1 ;
+      while(dummy ); 
    }
+      
 }
 
 
@@ -30,14 +35,24 @@ int saveState(unsigned idx)
 int lottery()
 {
    // for now implementing round robin
-   int winner=sData.threadID+1;
-   if( sData.threadID >5 )
+   int winner=0;
+   winner = sData.threadID+1;
+   if( winner >=  MAX_THREADS )
       winner = 0;
    // calculate a winner
    return winner;
 }
 void preemtiveTime()
 {
+//   unsigned quantum;
+//   quantum = 100;
+//   ualarm(quantum);
+
+   //getitimer(ITIMER_VIRTUAL,&sData.timer);
+   sData.timer.it_value.tv_sec = 0;
+   sData.timer.it_value.tv_usec = 100000;
+   sData.timer.it_interval.tv_sec = 0;
+   sData.timer.it_interval.tv_usec = 100000;
    setitimer(ITIMER_VIRTUAL, &sData.timer, 0);
    return;
 }
@@ -55,7 +70,7 @@ void schedulerInit()
       sData.taskInit[thread] = false;
    }
    // init the timer with 0
-   sData.timer.it_interval.tv_sec = 0;
+   sData.timer.it_interval.tv_sec = 2;
    sData.timer.it_interval.tv_usec = 0;
    sData.timer.it_value.tv_sec = 2; // quantum value
    sData.timer.it_value.tv_usec=0;
@@ -65,7 +80,7 @@ void schedulerInit()
  * Lottery Scheduler
  *
  ***************************************************/
-void scheduler()
+void scheduler(int val)
 {
    int ret;
    int allDone;
@@ -74,19 +89,22 @@ void scheduler()
    ret = saveState(sData.threadID);
    if( ret != 0 )
    {
+      printf("restoring state %d\n", sData.threadID);
       // return to resume execution
       // in the thread
       return;
    }
+   dummy = 0;
    if( !initDone )
    {
+      printf("entering init\n");
       schedulerInit();
    }
    sData.threadID = lottery();
+   // Catch the timer signal
+   signal(SIGVTALRM, scheduler);
    // Set timer
    preemtiveTime();
-   // Catch the timer signal
-   signal(SIGALRM, scheduler);
    printf("sigalm passed\n");
    if( !sData.taskInit[sData.threadID] )
    {
@@ -106,6 +124,7 @@ void scheduler()
       // Restore the state
       restoreState(sData.threadID);
    }
+   return;
 }
 
 

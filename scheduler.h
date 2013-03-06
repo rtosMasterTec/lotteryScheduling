@@ -31,6 +31,6 @@ typedef struct scheduler_s
 // public Functions
 
 void schedulerInit();
-void scheduler();
+void scheduler(int val);
 
 #endif // __SCHEDULER_H__
