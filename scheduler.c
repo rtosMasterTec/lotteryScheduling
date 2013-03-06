@@ -1,7 +1,14 @@
 #include "scheduler.h"
+<<<<<<< HEAD
 
 static volatile int dummy;
 
+=======
+#include <stdio.h>   /* required for file operations */
+#include <time.h>
+#include <stdbool.h>
+#include "configLoad.h"
+>>>>>>> 29a6e6120afa04ac2ce1280560422fc164a3c154
 
 static scheduler_t sData;
 static bool initDone ;
@@ -32,6 +39,7 @@ int saveState(unsigned idx)
    return sigsetjmp(sData.env[idx], 1);
 }
 
+<<<<<<< HEAD
 int lottery()
 {
    // for now implementing round robin
@@ -41,7 +49,275 @@ int lottery()
       winner = 0;
    // calculate a winner
    return winner;
+=======
+unsigned lottery (void) {
+
+    unsigned totalactivos = 0;
+    unsigned winthread = 0;
+    unsigned winner = 0;
+
+    /* En caso ningun thread este activo */
+    if (!config.threadbuffer[0] && !config.threadbuffer[1] && !config.threadbuffer[2] && !config.threadbuffer[3] && !config.threadbuffer[4]) {
+        winthread = 0;
+        winner = 0;
+        return winthread;
+    }
+
+    /* Determina el total de tiquetes que seran evaluados para obtener el ganador */
+    if (config.threadbuffer[0]) totalactivos = config.tickets[0];
+    if (config.threadbuffer[1]) totalactivos = (totalactivos + config.tickets[1]);
+    if (config.threadbuffer[2]) totalactivos = (totalactivos + config.tickets[2]);
+    if (config.threadbuffer[3]) totalactivos = (totalactivos + config.tickets[3]);
+    if (config.threadbuffer[4]) totalactivos = (totalactivos + config.tickets[4]);
+
+    /* Realiza la rifa y se obtiene de manera aleatoria el boleto ganador */
+    do {
+        winner = rand() % totalactivos;
+    } while (winner == 0);
+
+    /* Determina segun el boleto cual es el thread ganador */
+    /* Casos en q puede ganar thread 1 */
+    if (config.threadbuffer[0] && winner <= config.tickets[0]) {
+        winthread = 1;
+        return winthread;
+    }
+
+    /* Casos en q puede ganar thread 2 */
+
+    if (config.threadbuffer[0] && config.threadbuffer[1] && winner <= (config.tickets[1]+config.tickets[0])) {
+        winthread = 2;
+        return winthread;
+    }
+    if (!config.threadbuffer[0] && config.threadbuffer[1] && winner <= config.tickets[1]) {
+        winthread = 2;
+        return winthread;
+    }
+
+    /* Casos en q puede ganar thread 3 */
+
+    if (config.threadbuffer[0]) {
+        if (config.threadbuffer[1]) {
+            if (config.threadbuffer[2] && winner <= (config.tickets[0]+config.tickets[1]+config.tickets[2])) {
+                winthread = 3;
+                return winthread;
+            }
+        }
+        if (!config.threadbuffer[1]) {
+            if (config.threadbuffer[2] && winner <= (config.tickets[0]+config.tickets[2])) {
+                winthread = 3;
+                return winthread;
+            }
+        }
+    }
+    if (!config.threadbuffer[0]) {
+        if (config.threadbuffer[1]) {
+            if (config.threadbuffer[2] && winner <= (config.tickets[1]+config.tickets[2])) {
+                winthread = 3;
+                return winthread;
+            }
+        }
+        if (!config.threadbuffer[1]) {
+            if (config.threadbuffer[2] && winner <= config.tickets[2]) {
+                winthread = 3;
+                return winthread;
+            }
+        }
+    }
+
+    /* Casos en q puede ganar thread 4 */
+
+    if (config.threadbuffer[0]) {
+        if (config.threadbuffer[1]) {
+            if (config.threadbuffer[2]) {
+                if (config.threadbuffer[3] && winner <= (config.tickets[0]+config.tickets[1]+config.tickets[2]+config.tickets[3])) {
+                    winthread = 4;
+                    return winthread;
+                }
+            }
+            if (!config.threadbuffer[2]) {
+                if (config.threadbuffer[3] && winner <= (config.tickets[0]+config.tickets[1]+config.tickets[3])) {
+                    winthread = 4;
+                    return winthread;
+                }
+            }
+        }
+        if (!config.threadbuffer[1]) {
+            if (config.threadbuffer[2]) {
+                if (config.threadbuffer[3] && winner <= (config.tickets[0]+config.tickets[2]+config.tickets[3])) {
+                    winthread = 4;
+                    return winthread;
+                }
+            }
+            if (!config.threadbuffer[2]) {
+                if (config.threadbuffer[3] && winner <= (config.tickets[0]+config.tickets[3])) {
+                    winthread = 4;
+                    return winthread;
+                }
+            }
+        }
+    }
+    if (!config.threadbuffer[0]) {
+        if (config.threadbuffer[1]) {
+            if (config.threadbuffer[2]) {
+                if (config.threadbuffer[3] && winner <= (config.tickets[1]+config.tickets[2]+config.tickets[3])) {
+                    winthread = 4;
+                    return winthread;
+                }
+            }
+            if (!config.threadbuffer[2]) {
+                if (config.threadbuffer[3] && winner <= (config.tickets[1]+config.tickets[3])) {
+                    winthread = 4;
+                    return winthread;
+                }
+            }
+        }
+        if (!config.threadbuffer[1]) {
+            if (config.threadbuffer[2]) {
+                if (config.threadbuffer[3] && winner <= (config.tickets[2]+config.tickets[3])) {
+                    winthread = 4;
+                    return winthread;
+                }
+            }
+            if (!config.threadbuffer[2]) {
+                if (config.threadbuffer[3] && winner <= config.tickets[3]) {
+                    winthread = 4;
+                    return winthread;
+                }
+            }
+        }
+    }
+
+    /* Casos en q puede ganar thread 5 */
+
+    if (config.threadbuffer[0]) {
+        if (config.threadbuffer[1]) {
+            if (config.threadbuffer[2]) {
+                if (config.threadbuffer[3]) {
+                    if (config.threadbuffer[4] && winner <= (config.tickets[0]+config.tickets[1]+config.tickets[2]+config.tickets[3]+config.tickets[4])) {
+                        winthread = 5;
+                        return winthread;
+                    }
+                }
+                if (!config.threadbuffer[3]) {
+                    if (config.threadbuffer[4] && winner <= (config.tickets[0]+config.tickets[1]+config.tickets[2]+config.tickets[4])) {
+                        winthread = 5;
+                        return winthread;
+                    }
+                }
+            }
+            if (!config.threadbuffer[2]) {
+                if (config.threadbuffer[3]) {
+                    if (config.threadbuffer[4] && winner <= (config.tickets[0]+config.tickets[1]+config.tickets[3]+config.tickets[4])) {
+                        winthread = 5;
+                        return winthread;
+                    }
+                }
+                if (!config.threadbuffer[3]) {
+                    if (config.threadbuffer[4] && winner <= (config.tickets[0]+config.tickets[1]+config.tickets[4])) {
+                        winthread = 5;
+                        return winthread;
+                    }
+                }
+            }
+        }
+        if (!config.threadbuffer[1]) {
+            if (config.threadbuffer[2]) {
+                if (config.threadbuffer[3]) {
+                    if (config.threadbuffer[4] && winner <= (config.tickets[0]+config.tickets[2]+config.tickets[3]+config.tickets[4])) {
+                        winthread = 5;
+                        return winthread;
+                    }
+                }
+                if (!config.threadbuffer[3]) {
+                    if (config.threadbuffer[4] && winner <= (config.tickets[0]+config.tickets[2]+config.tickets[4])) {
+                        winthread = 5;
+                        return winthread;
+                    }
+                }
+            }
+            if (!config.threadbuffer[2]) {
+                if (config.threadbuffer[3]) {
+                    if (config.threadbuffer[4] && winner <= (config.tickets[0]+config.tickets[3]+config.tickets[4])) {
+                        winthread = 5;
+                        return winthread;
+                    }
+                }
+                if (!config.threadbuffer[3]) {
+                    if (config.threadbuffer[4] && winner <= (config.tickets[0]+config.tickets[4])) {
+                        winthread = 5;
+                        return winthread;
+                    }
+                }
+            }
+        }
+    }
+    if (!config.threadbuffer[0]) {
+        if (config.threadbuffer[1]) {
+            if (config.threadbuffer[2]) {
+                if (config.threadbuffer[3]) {
+                    if (config.threadbuffer[4] && winner <= (config.tickets[1]+config.tickets[2]+config.tickets[3]+config.tickets[4])) {
+                        winthread = 5;
+                        return winthread;
+                    }
+                }
+                if (!config.threadbuffer[3]) {
+                    if (config.threadbuffer[4] && winner <= (config.tickets[1]+config.tickets[2]+config.tickets[4])) {
+                        winthread = 5;
+                        return winthread;
+                    }
+                }
+            }
+            if (!config.threadbuffer[2]) {
+                if (config.threadbuffer[3]) {
+                    if (config.threadbuffer[4] && winner <= (config.tickets[1]+config.tickets[3]+config.tickets[4])) {
+                        winthread = 5;
+                        return winthread;
+                    }
+                }
+                if (!config.threadbuffer[3]) {
+                    if (config.threadbuffer[4] && winner <= (config.tickets[1]+config.tickets[4])) {
+                        winthread = 5;
+                        return winthread;
+                    }
+                }
+            }
+        }
+        if (!config.threadbuffer[1]) {
+            if (config.threadbuffer[2]) {
+                if (config.threadbuffer[3]) {
+                    if (config.threadbuffer[4] && winner <= (config.tickets[2]+config.tickets[3]+config.tickets[4])) {
+                        winthread = 5;
+                        return winthread;
+                    }
+                }
+                if (!config.threadbuffer[3]) {
+                    if (config.threadbuffer[4] && winner <= (config.tickets[2]+config.tickets[4])) {
+                        winthread = 5;
+                        return winthread;
+                    }
+                }
+            }
+            if (!config.threadbuffer[2]) {
+                if (config.threadbuffer[3]) {
+                    if (config.threadbuffer[4] && winner <= (config.tickets[3]+config.tickets[4])) {
+                        winthread = 5;
+                        return winthread;
+                    }
+                }
+                if (!config.threadbuffer[3]) {
+                    if (config.threadbuffer[4] && winner <= config.tickets[4]) {
+                        winthread = 5;
+                        return winthread;
+                    }
+                }
+            }
+        }
+    }
+
+    return winthread;
+>>>>>>> 29a6e6120afa04ac2ce1280560422fc164a3c154
 }
+
 void preemtiveTime()
 {
 //   unsigned quantum;
@@ -57,10 +333,20 @@ void preemtiveTime()
    return;
 }
 // placeholder
-int  invalidateThread() 
-{
-   return 0;
+bool invalidateThread (unsigned ID) {
+    bool Done = false;
+
+    if (ID == 1) config.threadbuffer[0] = false;
+    if (ID == 2) config.threadbuffer[1] = false;
+    if (ID == 3) config.threadbuffer[2] = false;
+    if (ID == 4) config.threadbuffer[3] = false;
+    if (ID == 5) config.threadbuffer[4] = false;
+
+    Done = !(config.threadbuffer[0] | config.threadbuffer[1] | config.threadbuffer[2] | config.threadbuffer[3] | config.threadbuffer[4]);
+
+    return Done;
 }
+
 void schedulerInit()
 {
    unsigned thread;
@@ -83,7 +369,7 @@ void schedulerInit()
 void scheduler(int val)
 {
    int ret;
-   int allDone;
+   bool allDone = false;
    printf("Getting the alarm for thread: %d\n", sData.threadID );
    // Save the state
    ret = saveState(sData.threadID);
@@ -114,7 +400,7 @@ void scheduler(int val)
       algo();
       allDone = invalidateThread(sData.threadID);
       // enters if all the threads had completed their job
-      if(allDone  == 1 )
+      if(allDone)
       {
          return;
       }

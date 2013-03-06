@@ -10,6 +10,7 @@ typedef struct threadData_s {
     double currPiValue;
 } threadData_t;
 
-void calculatePI(threadData_t *t);
+
+void calculatePI(threadData_t *t, double percentage);
 
 #endif // __MATHALGO_H__
