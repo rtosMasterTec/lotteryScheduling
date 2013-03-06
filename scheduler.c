@@ -37,13 +37,15 @@ int saveState(unsigned idx)
 {
    // giving thread idx and value to return
    int ret;
+   void * ptr;
   
 
    ret = sigsetjmp(sData.env[idx], 1);
    // modify the stack to not interfere with current execution
-   if( 5 != idx )
+   if( 0 != ret && 5 != idx )
    {
-      //sData.env[idx][JB_SP] = (struct __jmp_buf_tag) (&stack[idx][STACK_SIZE -1]);
+      //ptr = (&sData.env[idx]+JB_SP );
+      //*ptr = (uint32_t ) (&stack[idx][STACK_SIZE -1]);
    }
    return ret;
 }
@@ -53,8 +55,8 @@ int lottery()
    // for now implementing round robin
    int winner=0;
    winner = sData.threadID+1;
-   //winner =0;
-   if( winner >=  MAX_THREADS )
+   winner =0;
+   if( winner >= MAX_THREADS    )
       winner = 0;
    // calculate a winner
    return winner;
@@ -334,6 +336,7 @@ void preemtiveTime()
 //   ualarm(quantum);
 
    //getitimer(ITIMER_VIRTUAL,&sData.timer);
+   printf("setting the timer\n");
    sData.timer.it_value.tv_sec = 0;
    sData.timer.it_value.tv_usec = 100000;
    sData.timer.it_interval.tv_sec = 0;
@@ -365,11 +368,7 @@ void schedulerInit()
    {
       sData.taskInit[thread] = false;
    }
-   // init the timer with 0
-   sData.timer.it_interval.tv_sec = 2;
-   sData.timer.it_interval.tv_usec = 0;
-   sData.timer.it_value.tv_sec = 2; // quantum value
-   sData.timer.it_value.tv_usec=0;
+
 }
 /***************************************************
  *

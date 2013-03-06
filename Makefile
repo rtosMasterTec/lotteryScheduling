@@ -20,7 +20,7 @@ TARGETNAME      := lottery.exec
 # ---> Compileroptions
 CC              := gcc
 CXX             := g++
-CFLAGS          := -Wall -W -g -DDEBUG -D_REENTRANT 
+CFLAGS          := 
 #CFLAGS          := -Wall -W -g -DDEBUG -D_REENTRANT -std=c99
 #CFLAGS          := -pipe -mcpu=i686 -march=i686 -O3 -fomit-frame-pointer -Wall -W -g -DDEBUG -D_REENTRANT
 #CXXFLAGS        := -pipe -mcpu=i686 -march=i686 -O3 -fno-rtti -Wall -W -g -DDEBUG -D_REENTRANT
