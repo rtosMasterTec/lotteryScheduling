@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include "mathAlgo.h"
+#include "curses.h"
 
 void print2screen(
 	threadData_t *ta,

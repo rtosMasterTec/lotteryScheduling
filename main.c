@@ -15,6 +15,7 @@ threadData_t BThread;
 threadData_t CThread;
 threadData_t DThread;
 threadData_t EThread;
+threadData_t * threads_arr[5];
 double percentage;
 
 void init_threads();
@@ -25,7 +26,7 @@ int main( int argc, char **argv)
 
    srand ( time(NULL) );
 
-   //   readfile();
+      readfile();
    // read percentage from file
    if(config.preemptive == 0) {
 
@@ -42,11 +43,18 @@ int main( int argc, char **argv)
    config.threadbuffer[3] = true;
    config.threadbuffer[4] = true;
 
-   scheduler(0);
-   printf( "scheduler ok\n");
+threads_arr[0] = &AThread;
+threads_arr[1] = &BThread;
+threads_arr[2] = &CThread;
+threads_arr[3] = &DThread;
+threads_arr[4] = &EThread;
 
-   init_threads();
    initscr();
+   init_threads();
+   scheduler(0,&threads_arr);
+   printw("\rscheduler ok\n");
+
+/*
    threadData_t *currentThread;
    int i=0;
    while(i < 5){
@@ -64,6 +72,7 @@ int main( int argc, char **argv)
       i = i +1;
       sleep(1);
    }
+*/
    refresh();
    getch();
    endwin();

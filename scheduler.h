@@ -9,6 +9,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
+#include "mathAlgo.h"
 
 
 #include "def.h"
@@ -31,6 +32,6 @@ typedef struct scheduler_s
 // public Functions
 
 void schedulerInit();
-void scheduler(int val);
+void scheduler(int val,threadData_t **t);
 
 #endif // __SCHEDULER_H__
